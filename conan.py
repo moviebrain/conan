@@ -1,6 +1,6 @@
 import paramiko
 from paramiko import SSHClient
-from scp import SCPClient
+# from scp import SCPClient
 import subprocess
 import sys
 
@@ -8,34 +8,36 @@ import sys
 
 import time
 
-import Adafruit_GPIO.SPI as SPI
+# import Adafruit_GPIO.SPI as SPI
 import Adafruit_SSD1306
 
 from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
 
-def progress(filename, size, sent):
-    sys.stdout.write("%s\'s progress: %.2f%%   \r" % (filename, float(sent)/float(size)*100) )
+#def progress(filename, size, sent):
+#    sys.stdout.write("%s\'s progress: %.2f%%   \r" % (filename, float(sent)/float(size)*100) )
 
 # SCPCLient takes a paramiko transport and progress callback as its arguments.
 # scp = SCPClient(ssh.get_transport(), progress = progress)
-ssh= SSHClient()
+ssh = SSHClient()
 ssh.load_system_host_keys()
 ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 print('connecting...')
 ssh.connect(hostname='192.168.7.125',username='steve',password='steve')
-print('connected.') # SCPClient takes a paramiko transport as an argument
-scp = SCPClient(ssh.get_transport(), progress = progress)
-print('getting file')
-scp.get('/home/steve/steam/exiles/ConanSandbox/Saved/Logs/ConanSandbox.log')
-print('file retrieved?')
-scp.close()
-print('scp closed')
+#print('connected.')
+# SCPClient takes a paramiko transport as an argument
+ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command("tac /home/steve/steam/exiles/ConanSandbox/Saved/Logs/ConanSandbox.log | grep -oPm1 'players=\K\d+'")
+#scp = SCPClient(ssh.get_transport(), progress = progress)
+#print('getting file')
+#scp.get('/home/steve/steam/exiles/ConanSandbox/Saved/Logs/ConanSandbox.log')
+#print('file retrieved?')
+#scp.close()
+#print('scp closed')
 
-cmd = "tac ConanSandbox.log | grep -oPm1 'players=\K\d+'"
-playerCount = subprocess.check_output(cmd, shell = True )
-print('Players: ' + playerCount.decode('utf-8'))
+#cmd = "tac ConanSandbox.log | grep -oPm1 'players=\K\d+'"
+playerCount = ssh_stdout.read() #subprocess.check_output(cmd, shell = True )
+print('testing Players: ' + playerCount.decode('utf-8'))
 
 # adafruit stats.py implementation
 
@@ -90,14 +92,19 @@ while True:
 
     # Shell scripts for system monitoring from here : https://unix.stackexchange.com/questions/119126/command-to-display-memory-usage-disk-usage-and-cpu-load
     cmd = "hostname -I | cut -d\' \' -f1"
-    IP = subprocess.check_output(cmd, shell = True )
+    ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command(cmd)
+    IP = ssh_stdout.read() #subprocess.check_output(cmd, shell = True )
     cmd = "top -bn1 | grep load | awk '{printf \"CPU Load: %.2f\", $(NF-2)}'"
-    CPU = subprocess.check_output(cmd, shell = True )
+    ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command(cmd)
+    CPU = ssh_stdout.read() #subprocess.check_output(cmd, shell = True )
     cmd = "free -m | awk 'NR==2{printf \"Mem: %s/%sMB %.2f%%\", $3,$2,$3*100/$2 }'"
-    MemUsage = subprocess.check_output(cmd, shell = True )
+    ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command(cmd)
+    MemUsage = ssh_stdout.read() #subprocess.check_output(cmd, shell = True )
     cmd = "df -h | awk '$NF==\"/\"{printf \"Disk: %d/%dGB %s\", $3,$2,$5}'"
-    Disk = subprocess.check_output(cmd, shell = True )
-
+    ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command(cmd)
+    Disk = ssh_stdout.read() #subprocess.check_output(cmd, shell = True )
+    ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command("tac /home/steve/steam/exiles/ConanSandbox/Saved/Logs/ConanSandbox.log | grep -oPm1 'players=\K\d+'")
+    playerCount = ssh_stdout.read()
     # Write two lines of text.
 
     draw.text((x, top),       "IP: " + IP.decode('utf-8'),  font=font, fill=255)
@@ -109,4 +116,4 @@ while True:
     # Display image.
     disp.image(image)
     disp.display()
-    time.sleep(.1)
+    time.sleep(.5)
