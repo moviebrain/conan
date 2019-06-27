@@ -27,7 +27,7 @@ ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 ssh.connect(hostname='192.168.7.125',username='steve',password='steve')
 #print('connected.')
 # SCPClient takes a paramiko transport as an argument
-ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command("tac /home/steve/steam/exiles/ConanSandbox/Saved/Logs/ConanSandbox.log | grep -oPm1 'players=\K\d+'")
+#ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command("tac /home/steve/steam/exiles/ConanSandbox/Saved/Logs/ConanSandbox.log | grep -oPm1 'players=\K\d+'")
 #scp = SCPClient(ssh.get_transport(), progress = progress)
 #print('getting file')
 #scp.get('/home/steve/steam/exiles/ConanSandbox/Saved/Logs/ConanSandbox.log')
@@ -103,7 +103,7 @@ while True:
     cmd = "top -bn1 | grep load | awk '{printf \"CPU Load: %.2f\", $(NF-2)}'"
     ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command(cmd)
     CPU = ssh_stdout.read() #subprocess.check_output(cmd, shell = True )
-    cmd = "free -m | awk 'NR==2{printf \"Mem: %s/%sMB %.2f%%\", $3,$2,$3*100/$2 }'"
+    cmd = "free -m | awk 'NR==2{printf \"Mem: %s/%sMB %d%%\", $3,$2,$3*100/$2 }'"
     ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command(cmd)
     MemUsage = ssh_stdout.read() #subprocess.check_output(cmd, shell = True )
     cmd = "df -h | awk '$NF==\"/\"{printf \"Disk: %d/%dGB %s\", $3,$2,$5}'"
