@@ -23,7 +23,7 @@ from PIL import ImageFont
 ssh = SSHClient()
 ssh.load_system_host_keys()
 ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-print('connecting...')
+#print('connecting...')
 ssh.connect(hostname='192.168.7.125',username='steve',password='steve')
 #print('connected.')
 # SCPClient takes a paramiko transport as an argument
