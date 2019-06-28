@@ -104,11 +104,11 @@ while True:
 
     #draw.text((x, top),       "IP: " + IP.decode('utf-8'),  font=font, fill=255)
     draw.text((x, top),       Time,  font=font, fill=255)
-    draw.text((x, top+8),     CPU.decode('utf-8'), font=font, fill=255)
-    draw.text((x, top+16),    MemUsage.decode('utf-8'),  font=font, fill=255)
-    draw.text((x, top+24),    Disk.decode('utf-8'),  font=font, fill=255)
-    draw.text((x, top+32),    "Player Count: " + playerCount.decode('utf-8'),  font=font, fill=255)
-    #draw.text((x, top+40),    Time,  font=font, fill=255)
+    draw.text((x, top+8),     "Player Count: " + playerCount.decode('utf-8'),  font=font, fill=255)
+    draw.text((x, top+16),    CPU.decode('utf-8'), font=font, fill=255)
+    draw.text((x, top+24),    MemUsage.decode('utf-8'),  font=font, fill=255)
+    draw.text((x, top+32),    Disk.decode('utf-8'),  font=font, fill=255)
+
     
     # Display image.
     disp.image(image)
