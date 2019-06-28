@@ -49,14 +49,13 @@ disp.begin()
 # Clear display.
 disp.clear()
 disp.display()
-# image = Image.open('conan2.png').resize((disp.width, disp.height), Image.ANTIALIAS).convert('1')
-
-# time.sleep(5)
 
 # Create blank image for drawing.
 # Make sure to create image with mode '1' for 1-bit color.
 width = disp.width
 height = disp.height
+
+# splash screen
 image = Image.open('IMG_8590.PNG').resize((disp.width, disp.height), Image.ANTIALIAS).convert('1')
 disp.image(image)
 disp.display()
@@ -105,7 +104,7 @@ while True:
     ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command("tac /home/steve/steam/exiles/ConanSandbox/Saved/Logs/ConanSandbox.log | grep -oPm1 'players=\K\d+'")
     playerCount = ssh_stdout.read()
     Time = time.strftime("%Y-%m-%d %H:%M:%S",time.localtime())
-    # Write two lines of text.
+    # Write lines of text.
 
     #draw.text((x, top),       "IP: " + IP.decode('utf-8'),  font=font, fill=255)
     draw.text((x, top),       Time,  font=font, fill=255)
