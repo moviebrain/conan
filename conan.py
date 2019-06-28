@@ -2,7 +2,7 @@ import paramiko
 from paramiko import SSHClient
 # from scp import SCPClient
 # import subprocess
-# import sys
+import sys
 
 # adafruit display imports
 
@@ -25,11 +25,11 @@ ssh.load_system_host_keys()
 ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
 authfile = open("auth.txt", "r")
-print(authfile.readline(1))
-username = file.readline(1)
-password = file.readline(2)
+authlist = authfile.readlines()
+authlist[0] = authlist[0].strip('\n')
+authlist[1] = authlist[1].strip('\n')
 
-ssh.connect(hostname='192.168.7.125',username.decode('utf-8'),password)
+ssh.connect(hostname='192.168.7.125',username=authlist[0],password=authlist[1])
 
 
 # adafruit stats.py implementation
