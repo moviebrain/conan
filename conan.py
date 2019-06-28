@@ -85,9 +85,9 @@ while True:
     draw.rectangle((0,0,width,height), outline=0, fill=0)
 
     # Shell scripts for system monitoring from here : https://unix.stackexchange.com/questions/119126/command-to-display-memory-usage-disk-usage-and-cpu-load
-    cmd = "hostname -I | cut -d\' \' -f1"
-    ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command(cmd)
-    IP = ssh_stdout.read() #subprocess.check_output(cmd, shell = True )
+    #cmd = "hostname -I | cut -d\' \' -f1"
+    #ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command(cmd)
+    #IP = ssh_stdout.read() #subprocess.check_output(cmd, shell = True )
     cmd = "top -bn1 | grep load | awk '{printf \"CPU Load: %.2f\", $(NF-2)}'"
     ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command(cmd)
     CPU = ssh_stdout.read() #subprocess.check_output(cmd, shell = True )
@@ -99,15 +99,18 @@ while True:
     Disk = ssh_stdout.read() #subprocess.check_output(cmd, shell = True )
     ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command("tac /home/steve/steam/exiles/ConanSandbox/Saved/Logs/ConanSandbox.log | grep -oPm1 'players=\K\d+'")
     playerCount = ssh_stdout.read()
+    Time = time.strftime("%Y-%m-%d %H:%M:%S",time.localtime())
     # Write two lines of text.
 
-    draw.text((x, top),       "IP: " + IP.decode('utf-8'),  font=font, fill=255)
+    #draw.text((x, top),       "IP: " + IP.decode('utf-8'),  font=font, fill=255)
+    draw.text((x, top),       Time,  font=font, fill=255)
     draw.text((x, top+8),     CPU.decode('utf-8'), font=font, fill=255)
     draw.text((x, top+16),    MemUsage.decode('utf-8'),  font=font, fill=255)
     draw.text((x, top+24),    Disk.decode('utf-8'),  font=font, fill=255)
     draw.text((x, top+32),    "Player Count: " + playerCount.decode('utf-8'),  font=font, fill=255)
+    #draw.text((x, top+40),    Time,  font=font, fill=255)
     
     # Display image.
     disp.image(image)
     disp.display()
-    time.sleep(.5)
+    time.sleep(1)
