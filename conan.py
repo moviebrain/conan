@@ -24,7 +24,12 @@ ssh = SSHClient()
 ssh.load_system_host_keys()
 ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
-ssh.connect(hostname='192.168.7.125',username='steve',password='steve')
+authfile = open("auth.txt", "r")
+print(authfile.readline(1))
+username = file.readline(1)
+password = file.readline(2)
+
+ssh.connect(hostname='192.168.7.125',username.decode('utf-8'),password)
 
 
 # adafruit stats.py implementation
