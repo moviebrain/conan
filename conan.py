@@ -105,6 +105,9 @@ while True:
     ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command("tac /home/steve/steam/exiles/ConanSandbox/Saved/Logs/ConanSandbox.log | grep -oPm1 'players=\K\d+'")
     playerCount = ssh_stdout.read()
     Time = time.strftime("%Y-%m-%d %H:%M:%S",time.localtime())
+    ditkaFile = open('/home/pi/ditkaBot/HurricaneDitkaBot/conan.txt','w')
+    conanStats = 'Conan Exiles players currently online: ' + playerCount.decode('utf-8')
+    ditkaFile.write(conanStats)
     # Write two lines of text.
 
     #draw.text((x, top),       "IP: " + IP.decode('utf-8'),  font=font, fill=255)
