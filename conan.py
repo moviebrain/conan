@@ -107,6 +107,7 @@ while True:
     ditkaFile = open('/home/pi/ditkaBot/HurricaneDitkaBot/conan.txt','w')
     conanStats = 'Conan Exiles players currently online: ' + playerCount.decode('utf-8')
     ditkaFile.write(conanStats)
+    ditkaFile.close()
     # Write two lines of text.
     # Write lines of text.
     #draw.text((x, top),       "IP: " + IP.decode('utf-8'),  font=font, fill=255)
