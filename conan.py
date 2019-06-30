@@ -59,7 +59,7 @@ height = disp.height
 image = Image.open('IMG_8590.PNG').resize((disp.width, disp.height), Image.ANTIALIAS).convert('1')
 disp.image(image)
 disp.display()
-time.sleep(5)
+#time.sleep(5)
 
 # Get drawing object to draw on image.
 draw = ImageDraw.Draw(image)
@@ -101,13 +101,33 @@ while True:
     cmd = "df -h | awk '$NF==\"/\"{printf \"Disk: %d/%dGB %s\", $3,$2,$5}'"
     ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command(cmd)
     Disk = ssh_stdout.read() #subprocess.check_output(cmd, shell = True )
+    Time = time.strftime("%Y-%m-%d %H:%M:%S",time.localtime())
+    
+    #pulling conan player stats log
+#    ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command("tac /home/steve/steam/exiles/ConanSandbox/Saved/Logs/ConanSandbox.log | grep -oPm1 'players=\K\d+'")
+#    playerCount = ssh_stdout.read()
+
+#    ditkaFile = open('/home/pi/ditkaBot/HurricaneDitkaBot/conan.txt','w+')
+#    conanStats = 'Conan Exiles players currently online: ' + playerCount.decode('utf-8')
+#    ditkaFile.write(conanStats)
+    
+    ditkaFile = open('/home/pi/ditkaBot/HurricaneDitkaBot/conan.txt','r')
+    origStats = ditkaFile.readline()
+    ditkaFile.close()
     ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command("tac /home/steve/steam/exiles/ConanSandbox/Saved/Logs/ConanSandbox.log | grep -oPm1 'players=\K\d+'")
     playerCount = ssh_stdout.read()
-    Time = time.strftime("%Y-%m-%d %H:%M:%S",time.localtime())
-    ditkaFile = open('/home/pi/ditkaBot/HurricaneDitkaBot/conan.txt','w')
     conanStats = 'Conan Exiles players currently online: ' + playerCount.decode('utf-8')
 
-    ditkaFile.write(conanStats)
+    if origStats != conanStats:
+        ditkaFile = open('/home/pi/ditkaBot/HurricaneDitkaBot/conan.txt','w')
+        ditkaFile.write(conanStats)
+        print('updated conan.txt')
+        ditkaFile.close()
+    else:
+        ditkaFile.close()
+
+
+    
     # Write two lines of text.
     # Write lines of text.
     #draw.text((x, top),       "IP: " + IP.decode('utf-8'),  font=font, fill=255)
@@ -117,9 +137,8 @@ while True:
     draw.text((x, top+24),    MemUsage.decode('utf-8'),  font=font, fill=255)
     draw.text((x, top+32),    Disk.decode('utf-8'),  font=font, fill=255)
 
-    
     # Display image.
     disp.image(image)
     disp.display()
     time.sleep(5)
-playercount()
+    
