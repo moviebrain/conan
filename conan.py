@@ -114,7 +114,7 @@ while True:
     ditkaFile = open('/home/pi/ditkaBot/HurricaneDitkaBot/conan.txt','r')
     origStats = ditkaFile.readline()
     ditkaFile.close()
-    ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command("tac /home/steve/steam/exiles/ConanSandbox/Saved/Logs/ConanSandbox.log | grep -oPm1 'players=\K\d+'")
+    ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command("tac /home/steam/exiles/ConanSandbox/Saved/Logs/ConanSandbox.log | grep -oPm1 'players=\K\d+'")
     playerCount = ssh_stdout.read()
     conanStats = 'Conan Exiles players currently online: ' + playerCount.decode('utf-8')
 
